@@ -1,13 +1,20 @@
 export function name_error(classify,user){
     return {
-        type: "Conflict",
+        type: "CONFLICT",
         message: `Um ${classify} com esse ${user} já existe!`  
     }
 }
 
-export function id_error(){
+export function id_error(type){
     return {
-        type: "Not Found",
-        message: `Não existe cliente com o id fornecido`  
+        type: "NOT FOUND",
+        message: `Não existe ${type} com o id fornecido`  
+    }
+}
+
+export function numberRent_error(){
+    return {
+        type: "UNPROCESSABLE ENTITY",
+        message: `Não tem jogos em estoque disponível para aluguél`  
     }
 }

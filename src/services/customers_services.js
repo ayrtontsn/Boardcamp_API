@@ -18,7 +18,7 @@ export async function get_customers_service(){
 
 export async function get_customers_byId_service(id){
     const result = await customers_repository.get_customers_byId_repository(id)
-    if (!result[0]) throw id_error()
+    if (!result[0]) throw id_error("cliente")
 
     return result
 }
