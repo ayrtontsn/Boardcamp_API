@@ -2,14 +2,10 @@ import { db } from "../config/database.js";
 import games_repository from "./games_repository.js";
 
 async function post_rentals_repository (customer_id,game_id,days_rented,pricePerDay) {
-
-    console.log(pricePerDay)
     const rent_date = new Date();
     const original_price = pricePerDay*days_rented;
-    console.log(original_price)
     const return_date = null
     const delay_fee = null
-    
 
 	await db.query(`INSERT INTO rentals ("customerId","gameId","rentDate","daysRented","originalPrice")
                         VALUES ($1,$2,$3,$4,$5);`,
@@ -55,9 +51,6 @@ async function get_rentals_byGame_repository (game_id) {
 
     return rentals
 }
-
-
-
 
 const rentals_repository = {
     post_rentals_repository,
