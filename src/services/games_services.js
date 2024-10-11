@@ -6,9 +6,9 @@ export async function post_games_service(body){
     const conflict = await games_repository.get_game_byName_repository(body.name)
     if(conflict.length >0) throw name_error("game","nome")
 
-    const result = await games_repository.post_game_repository(body)
+    await games_repository.post_game_repository(body)
 
-    return result
+    return
 }
 
 export async function get_games_service(){

@@ -25,3 +25,10 @@ export function rentDelivered_error(){
         message: `Aluguel já finalizado e jogo entregue`  
     }
 }
+
+export function rentNotDelivered_error(){
+    return {
+        type: "BAD REQUEST",
+        message: `Aluguel ainda não finalizado e jogo ainda não foi entregue`  
+    }
+}

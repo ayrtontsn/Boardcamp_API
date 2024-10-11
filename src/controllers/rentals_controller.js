@@ -1,5 +1,8 @@
-import { get_rentals_service, post_rentals_service, update_rentals_service } from "../services/rentals_service.js";
 import httpStatus from "http-status";
+import { delete_rentals_service,
+        get_rentals_service,
+        post_rentals_service,
+        update_rentals_service } from "../services/rentals_service.js";
 
 
 export async function post_rentals(req,res){
@@ -18,6 +21,13 @@ export async function get_rentals(req,res){
 export async function update_rentals(req,res){
     const { id } = req.params;
     await update_rentals_service(id);
+
+    res.sendStatus(httpStatus.OK)
+}
+
+export async function delete_rentals(req,res){
+    const { id } = req.params;
+    await delete_rentals_service(id);
 
     res.sendStatus(httpStatus.OK)
 }

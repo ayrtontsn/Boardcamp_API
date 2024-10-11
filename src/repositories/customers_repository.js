@@ -3,9 +3,7 @@ import { db } from "../config/database.js";
 async function post_customers_repository ({name,phone,cpf}) {
 	await db.query(`INSERT INTO customers (name,phone,cpf)
                         VALUES ($1,$2,$3);`, [name,phone,cpf]);
-    return {
-        name,phone,cpf
-    }
+    return
 }
 
 async function get_customers_repository () {

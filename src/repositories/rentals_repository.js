@@ -3,8 +3,6 @@ import { db } from "../config/database.js";
 async function post_rentals_repository (customer_id,game_id,days_rented,pricePerDay) {
     const rent_date = new Date();
     const original_price = pricePerDay*days_rented;
-    const return_date = null
-    const delay_fee = null
 
 	await db.query(`INSERT INTO rentals ("customerId","gameId","rentDate","daysRented","originalPrice")
                         VALUES ($1,$2,$3,$4,$5);`,
@@ -77,12 +75,21 @@ async function update_rentals_repository (id,originalPrice,rent_date,daysRented)
     return
 }
 
+async function delete_rentals_repository (id) {
+	await db.query(`DELETE FROM rentals
+                        WHERE "id"=$1;`,[id]);
+
+    return
+}
+
+
 const rentals_repository = {
     post_rentals_repository,
     get_rentals_repository,
     get_rentals_byGame_repository,
     get_rentals_byId_repository,
-    update_rentals_repository
+    update_rentals_repository,
+    delete_rentals_repository
 }
 
 export default rentals_repository

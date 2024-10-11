@@ -7,8 +7,8 @@ export async function post_customers_service(body){
     const conflict = await customers_repository.get_customers_byCpf_repository(body.cpf)
     if(conflict.length >0) throw name_error("cliente","cpf")
 
-    const result = await customers_repository.post_customers_repository(body)
-    return result
+    await customers_repository.post_customers_repository(body)
+    return
 }
 
 export async function get_customers_service(){

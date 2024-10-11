@@ -1,4 +1,4 @@
-import { id_error, numberRent_error, rentDelivered_error } from "../errors/errors.js"
+import { id_error, numberRent_error, rentDelivered_error, rentNotDelivered_error } from "../errors/errors.js"
 import customers_repository from "../repositories/customers_repository.js"
 import games_repository from "../repositories/games_repository.js"
 import rentals_repository from "../repositories/rentals_repository.js"
@@ -14,8 +14,8 @@ export async function post_rentals_service({customerId,gameId,daysRented}){
     const rentals_game = await rentals_repository.get_rentals_byGame_repository(gameId)
     if (rentals_game.rows.length===check_game[0].stockTotal) throw numberRent_error()
 
-    const result = await rentals_repository.post_rentals_repository(customerId,gameId,daysRented,check_game[0].pricePerDay)
-    return result
+    await rentals_repository.post_rentals_repository(customerId,gameId,daysRented,check_game[0].pricePerDay)
+    return
 }
 
 export async function get_rentals_service(){
@@ -25,12 +25,22 @@ export async function get_rentals_service(){
 
 export async function update_rentals_service(id){
     const rentals_game = await rentals_repository.get_rentals_byId_repository(id)
-    console.log(rentals_game.rows[0])
     if(rentals_game.rows.length===0) throw id_error("aluguel")
     if(rentals_game.rows[0].returnDate) throw rentDelivered_error()
     await rentals_repository.update_rentals_repository(id,
                                                         rentals_game.rows[0].originalPrice,
                                                         rentals_game.rows[0].rentDate,
                                                         rentals_game.rows[0].daysRented)
+    return
+}
+
+export async function delete_rentals_service(id){
+    const rentals_game = await rentals_repository.get_rentals_byId_repository(id)
+
+    if(rentals_game.rows.length===0) throw id_error("aluguel")
+
+    if(!rentals_game.rows[0].returnDate) throw rentNotDelivered_error()
+
+    await rentals_repository.delete_rentals_repository(id)
     return
 }
