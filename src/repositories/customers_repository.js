@@ -13,9 +13,9 @@ async function get_customers_repository () {
     return customers.rows
 }
 
-async function get_customers_byName_repository (name) {
+async function get_customers_byCpf_repository (cpf) {
 	const customer = await db.query(`SELECT * FROM customers
-                                    WHERE name=$1;`,[name]);
+                                    WHERE cpf=$1;`,[cpf]);
     return customer.rows
 }
 
@@ -28,7 +28,7 @@ async function get_customers_byId_repository (id) {
 const customers_repository = {
     post_customers_repository,
     get_customers_repository,
-    get_customers_byName_repository,
+    get_customers_byCpf_repository,
     get_customers_byId_repository
 }
 
