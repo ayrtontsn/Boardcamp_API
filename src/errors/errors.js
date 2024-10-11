@@ -18,3 +18,10 @@ export function numberRent_error(){
         message: `Não tem jogos em estoque disponível para aluguél`  
     }
 }
+
+export function rentDelivered_error(){
+    return {
+        type: "UNPROCESSABLE ENTITY",
+        message: `Aluguel já finalizado e jogo entregue`  
+    }
+}

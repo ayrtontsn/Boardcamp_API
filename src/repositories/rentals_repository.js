@@ -1,5 +1,4 @@
 import { db } from "../config/database.js";
-import games_repository from "./games_repository.js";
 
 async function post_rentals_repository (customer_id,game_id,days_rented,pricePerDay) {
     const rent_date = new Date();
@@ -19,7 +18,8 @@ async function get_rentals_repository () {
                                         games.id AS game_id, games.name AS game_name
                                         FROM rentals
                                         JOIN customers ON rentals."customerId"=customers.id
-                                        JOIN games ON rentals."gameId"=games.id;`);
+                                        JOIN games ON rentals."gameId"=games.id
+                                        ORDER BY rentals.id;`);
     const rentals = selected.rows.map(rent => {
             return{
             id: rent.id,
@@ -52,10 +52,37 @@ async function get_rentals_byGame_repository (game_id) {
     return rentals
 }
 
+async function get_rentals_byId_repository (id) {
+	const rentals = await db.query(`SELECT * FROM rentals
+                                        WHERE "id"=$1;`,[id]);
+
+    return rentals
+}
+
+async function update_rentals_repository (id,originalPrice,rent_date,daysRented) {
+    const return_date = new Date()
+    const pricePerDay = originalPrice/daysRented
+    const difference = Math.ceil((return_date.getTime() - rent_date.getTime())/(1000*60*60*24))-1
+    let delay_fee
+    if(difference>daysRented){
+        delay_fee = (difference-daysRented)*pricePerDay
+    } else {
+        delay_fee = 0
+    }
+    console.log(delay_fee)
+
+	await db.query(`UPDATE rentals SET "returnDate"=$1 , "delayFee"=$2
+                        WHERE id=$3;`,
+                        [return_date,delay_fee,id]);
+    return
+}
+
 const rentals_repository = {
     post_rentals_repository,
     get_rentals_repository,
-    get_rentals_byGame_repository
+    get_rentals_byGame_repository,
+    get_rentals_byId_repository,
+    update_rentals_repository
 }
 
 export default rentals_repository
